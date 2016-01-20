@@ -14,8 +14,10 @@ public class PointerSelectionController : MonoBehaviour
     // STATE STUFF //
     public int state; // simple state
 
-    public const int STATE_NOSELECTION = 0; // nothing is selected
+    public const int STATE_DESELECTED = 0; // nothing is selected
+    public const int STATE_SELECTING = 1; // in the process of selecting something
     public const int STATE_SELECTED = 2; // something is selected
+    public const int STATE_DESELECTING = 3; // in the process of deselecting something
     //             //
 
     public const float SELECTION_TIME = 2.0f; // the time it takes to select/deselect an object
@@ -28,7 +30,7 @@ public class PointerSelectionController : MonoBehaviour
     {
         hittingSomething = false;
         elapsedTime = 0.0f;
-        state = STATE_NOSELECTION;
+        state = STATE_DESELECTED;
     }
 
     void Start()
@@ -41,7 +43,7 @@ public class PointerSelectionController : MonoBehaviour
         float t = elapsedTime / SELECTION_TIME; // holds the fraction of timer completeness
         fractionComplete = t; // for reference by outside objects/scripts
 
-        if (state == STATE_NOSELECTION) // if nothing is selected
+        if (state == STATE_DESELECTED) // if nothing is selected
         {
             if (hittingSomething)
                 elapsedTime += Time.deltaTime; // if you're hitting something, slowly fill the timer
@@ -50,7 +52,7 @@ public class PointerSelectionController : MonoBehaviour
 
             if (t >= 1.00)
             {
-                state = STATE_SELECTED; // switch state to STATE_SELECTED if the timer fills up
+                state = STATE_SELECTING; // switch state to STATE_SELECTING if the timer fills up
             }
         }
         else if (state == STATE_SELECTED) // if something is selected
@@ -62,7 +64,7 @@ public class PointerSelectionController : MonoBehaviour
 
             if (t <= 0.00)
             {
-                state = STATE_NOSELECTION; // if the timer empties completely, switch states
+                state = STATE_DESELECTING; // if the timer empties completely, switch states
             }
         }
 

@@ -19,12 +19,30 @@ public class VisionRaycast : MonoBehaviour {
         {
             cursorScript.setVisible(true); // the cursor has a script that depends on update, we want that to run regardless of whether or not it's invisible
             cursor.transform.position = hit.point; // place the cursor where the collision is happening
-            cursorScript.hittingSomething = true; // tell the cursor that it's hitting something
+            if(hit.transform.gameObject.tag == "Selectable") // also, check if the thing you hit was tagged as "Selectable"
+            { 
+                cursorScript.hittingSomething = true; // tell the cursor that it's hitting something
+
+                if (cursorScript.state == PointerSelectionController.STATE_SELECTING) // if the cursor is in the process of selecting...
+                {
+                    hit.transform.gameObject.GetComponent<MRWindowController>().justSelected = true; // grab the window object and give it a message, that it has been selected
+                    cursorScript.state = PointerSelectionController.STATE_SELECTED; 
+                }
+                else if (cursorScript.state == PointerSelectionController.STATE_DESELECTING)
+                {
+                    cursorScript.state = PointerSelectionController.STATE_DESELECTED;
+                }
+            }
+            else
+            {
+                cursorScript.hittingSomething = false; // tell the cursor it's not hitting anything
+            }
         }
         else // there wasn't any collision
         {
             cursorScript.setVisible(false); // deactivate the cursor if it was active
             cursorScript.hittingSomething = false; // tell the cursor it's not hitting anything
         }
+
     }
 }
