@@ -103,7 +103,8 @@ public class VisionRaycast : MonoBehaviour {
             cursor.SetActive(false); // deactivate the cursor if it was active
         }
     }
-}</pre></code>
+}
+</pre></code>
 
 Woah! Warning, if you run the game now, the cursor will continuously fly at the screen like crazy! Very disorienting. It's doing this because VisionRaycast is registering the cursor itself as a collidable object. Let's deactivate our cursor's Sphere Collider.
 
@@ -137,7 +138,8 @@ When you're in STATE_SELECTED, do the opposite for deselecting the object.
 
 Then we have a "setClockFace()" function to flip our clock hands on and off based on the timer.
 
-<code><pre>using UnityEngine;
+<code><pre>
+using UnityEngine;
 using System.Collections;
 
 public class PointerSelectionController : MonoBehaviour
@@ -236,7 +238,8 @@ public class PointerSelectionController : MonoBehaviour
         else { tickOclockWhite[0].SetActive(true); tickOclockRed[0].SetActive(false); }
     }
 
-}</pre></code>
+}
+</pre></code>
 
 Now in VisionRaycast.cs, let's tell the cursor when we're hitting an object. We'll grab a reference to the script and use that to set the "hittingSomething" boolean.
 
@@ -265,7 +268,8 @@ Now in VisionRaycast.cs, let's tell the cursor when we're hitting an object. We'
             cursorScript.setVisible(false); // deactivate the cursor if it was active
             cursorScript.hittingSomething = false; // tell the cursor it's not hitting anything
         }
-    }</pre></code>
+    }
+</pre></code>
 
 To catch up to this point, pull from the commit https://github.com/Rosstin/GazeControllerTutorial/commit/2da3ccffd29a8ddeb99b44c09fe33f398ed10879
 
@@ -312,7 +316,8 @@ Take the Update statement for VisionRaycast and rewrite it like so:
             cursorScript.hittingSomething = false; // tell the cursor it's not hitting anything
         }
 
-    }</pre></code>
+    }
+</pre></code>
 
 Now it will only trigger if it hits something, AND the thing it hit was 'Selectable'.
 
@@ -392,7 +397,8 @@ public class MRWindowController : MonoBehaviour {
 
 
     }
-}</pre></code>
+}
+</pre></code>
 
 Now we need a way to send that message to the Window. I modify the PointerSelection code to have 2 additional states: STATE_SELECTING and STATE_DESELECTING. When the timer fills up from the STATE_DESELECTED state, we switch to STATE_SELECTING. This way, VisionRaycast can recognize when the Pointer is in STATE_SELECTING, and use that info to know that it should send a "hey you got selected" message to the object it's looking at. Then it can switch the state to STATE_SELECTED, and it won't continue to send that message over and over again.
 
@@ -464,7 +470,8 @@ Now we need a way to send that message to the Window. I modify the PointerSelect
         }
 
         setClockFace(); // keep the clock face updated
-    }</pre></code>
+    }
+</pre></code>
 
 Now in VisionRaycast.cs, we can intercept that state-changing event, and send the message to the object we are hitting.
 
@@ -512,7 +519,8 @@ Now in VisionRaycast.cs, we can intercept that state-changing event, and send th
         }
 
     }
-}</pre></code>
+}
+</pre></code>
 
 And voila! Here you are. The cursor tracks your position, it fills up when you're looking at an object, and when it completely fills up, you tell the object to "do something".
 
